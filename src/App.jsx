@@ -1,22 +1,36 @@
-//import { useState } from 'react'
-//import reactLogo from './assets/react.svg'
-//import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
+import { Routes, Route, Link } from 'react-router-dom';
+import Login from './login'; // importa a página de login
 
 function App() {
   return (
     <div>
-      <nav className="menu">
+      {/* Menu */}
+      <nav className="menuzinho">
         <ul>
-          <li><a href="#">Início</a></li>
-          <li><a href="#">Sobre</a></li>
-          <li><a href="#">Serviços</a></li>
-          <li><a href="#">Contato</a></li>
+          <li><Link to="/">logo loja</Link></li>
+          <li><Link to="/">NomeLoja</Link></li>
+          <li id="mDiferente">
+            <Link to="/login"><button>Login</button></Link>
+          </li>
         </ul>
       </nav>
+
+      {/* Rotas */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
     </div>
   );
 }
 
+function Home() {
+  return (
+    <div>
+      <h1>Bem-vindo à Home!</h1>
+    </div>
+  );
+}
 
-export default App
+export default App;
