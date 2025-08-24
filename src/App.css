@@ -1,7 +1,12 @@
-body{
-  background-image: linear-gradient(to buttom, rgb(32,35,42), rgb(43,47,56));
-  
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+body {
+  min-height: 100vh; /* permite scroll se o conteúdo for maior */
+  margin: 0;     /* remove margens que podem atrapalhar */
+  background-image: linear-gradient(to right,  rgb(32,35,42) 0%,  rgb(32,35,42) 50%,  rgb(43,47,56) 50%, rgb(43,47,56) 100%);
+  position: relative; /* necessário para elementos absolutos dentro do body */
 }
+
 
 .menuzinho{
   position:fixed; /*deixa ele fixo em cima*/
@@ -10,7 +15,6 @@ body{
   width: 100%;
   padding: 0; /*o espaçamento interno*/
   z-index: 1000; /*fica em cima dos outros elementos*/
-  background-color: rbg(32, 35, 42); 
 }
 
 .menuzinho ul{
@@ -19,6 +23,7 @@ list-style: none; /*isso aqui vai tirar as bolinhas da lista*/
 margin: 15px;
 padding: 0;
 }
+
 
 .menuzinho li{
   margin-right: 20px;
@@ -31,4 +36,110 @@ padding: 0;
 #mDiferente{
   margin-left: auto;
   padding-right: 30px;
+}
+
+.botaoUniversal{
+  background-color: rgb(43,47,56);
+  border-radius: 10px;
+  border-color: white;
+  font-family:Arial, Helvetica, sans-serif;
+  color:white;
+}
+
+.botaoUniversal:hover{
+  background-color: white;
+  color:black;
+  transform: scale(1.1);
+}
+
+h1, h2{
+  font-family: "Archivo Black", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.fontePrincipal{
+  font-size: 64px;
+  color:rgb(227,193,165);
+}
+
+.fonteSecundaria{
+  font-size: 24px;
+ color:rgb(227,193,165);
+}
+
+.paragrafo{
+  color:white;
+  font-size: 13px;
+  font-style: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+}
+
+#filho1, #filho3, #filho4 {
+   max-width: 350px;
+  width: 100%;
+  padding: 10px;
+   position: absolute;
+}
+
+#filho1{
+top: 80px;   
+left: 130px;  
+}
+
+#filho2 {
+  position: fixed;     
+  top: 52%;            
+  left: 50%;            
+  transform: translate(-50%, -50%); 
+  z-index: 2000;          /* garante que fique acima de tudo */
+}
+
+#filho2 img {
+  max-width: 350px;       /* ajusta o tamanho da imagem */
+  width: 100%;
+  height: auto;
+}
+
+.anelFundo {
+  position: absolute;
+  top: 33%;                /* centraliza verticalmente */
+  left: 58%;               /* desloca um pouco pra direita */
+  transform: translate(-50%, -50%);
+  width: 200px;            /* diâmetro externo do círculo */
+  height: 200px;
+  border: 30px solid rgb(163,0,255);; /* cor e espessura da borda */
+  border-radius: 50%;      /* deixa redondo */
+  background-color: transparent; /* deixa o centro vazado */
+  z-index: 1500;           /* atrás do copo */
+}
+
+#filho3{
+  
+  top: 400px;  
+  left: 100px;
+}
+
+#filho4{
+top: 400px;   
+right: 40px; 
+}
+
+
+
+
+#copo2{
+    position: fixed;     
+  top: 52%;            
+  left: 70%;            
+  transform: translate(-50%, -50%); 
+  z-index: 2000; 
+}
+
+#copo2 img{
+  max-width: 350px;       /* ajusta o tamanho da imagem */
+  width: 100%;
+  height: auto;
 }
