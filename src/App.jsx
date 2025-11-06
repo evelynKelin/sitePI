@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 
@@ -406,10 +407,27 @@ export default function App() {
           </li>
           <li>
             <Link to="/login" className="btn-login">Login</Link>
+=======
+import './App.css';
+import { Routes, Route, Link } from 'react-router-dom';
+import Login from './login'; // importa a página de login
+
+function App() {
+  return (
+    <div>
+      {/* Menu */}
+      <nav className="menuzinho">
+        <ul>
+          <li><Link to="/">logo loja</Link></li>
+          <li><Link to="/">NomeLoja</Link></li>
+          <li id="mDiferente">
+            <Link to="/login"><button>Login</button></Link>
+>>>>>>> 7b34aefe12918dbaf8592671d0aa6c38b9b68edb
           </li>
         </ul>
       </nav>
 
+<<<<<<< HEAD
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -422,3 +440,23 @@ export default function App() {
     </>
   );
 }
+=======
+      {/* Rotas */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </div>
+  );
+}
+
+function Home() {
+  return (
+    <div>
+      <h1>Bem-vindo à Home!</h1>
+    </div>
+  );
+}
+
+export default App;
+>>>>>>> 7b34aefe12918dbaf8592671d0aa6c38b9b68edb
