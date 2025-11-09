@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
@@ -626,33 +625,9 @@ position: fixed;
   font-size: 13px;
   margin-top: 10px;
 }
-=======
-.menuzinho{
-  position:fixed; /*deixa ele fixo em cima*/
-  top:0; /*cola no top*/
-  left: 0; /*cola na esquerda*/
-  width: 100%;
-  padding: 0; /*o espaçamento interno*/
-  z-index: 1000; /*fica em cima dos outros elementos*/
-}
 
-.menuzinho ul{
-display:flex; /*isso vai fazer eles ficarem um do lado do outro*/
-list-style: none; /*isso aqui vai tirar as bolinhas da lista*/
-margin: 15px;
-padding: 0;
-}
 
-.menuzinho li{
-  margin-right: 20px;
+.produto{
+  background-color: grey;
+  
 }
-
-.menuzinho a{
-  text-decoration: none;
-}
-
-#mDiferente{
-  margin-left: auto;
-  padding-right: 30px;
-}
->>>>>>> 7b34aefe12918dbaf8592671d0aa6c38b9b68edb

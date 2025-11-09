@@ -1,9 +1,10 @@
-<<<<<<< HEAD
+// src/App.jsx
+import React, { useState, useContext } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import React, { useState } from "react";
 
 import copo from "./assets/img/copo.png";
 import logo from "./assets/img/logo.png";
+import adicionar from "./assets/img/adicionar.png";
 
 import "./App.css";
 
@@ -11,11 +12,13 @@ import Verificado from "./Verificado";
 import Check from "./Check";
 import Seta from "./Seta";
 import Estrela from "./Estrela";
+import { UserContext } from "./UserContext";
+
+/* ==================== PÁGINAS ==================== */
 
 // Página 2
 const Pag2 = () => {
   const navigate = useNavigate();
-  const handleClick = () => {};
 
   return (
     <div id="vertical">
@@ -33,22 +36,10 @@ const Pag2 = () => {
 
           <div id="listap2">
             <ul>
-              <li>
-                <Verificado onClick={handleClick} />
-                <h2>Aço inoxidável fosco</h2>
-              </li>
-              <li>
-                <Verificado onClick={handleClick} />
-                <h2>Capacidade de 500 ml</h2>
-              </li>
-              <li>
-                <Verificado onClick={handleClick} />
-                <h2>Ecológico e reutilizável</h2>
-              </li>
-              <li>
-                <Verificado onClick={handleClick} />
-                <h2>Design minimalista</h2>
-              </li>
+              <li><Verificado /> <h2>Aço inoxidável fosco</h2></li>
+              <li><Verificado /> <h2>Capacidade de 500 ml</h2></li>
+              <li><Verificado /> <h2>Ecológico e reutilizável</h2></li>
+              <li><Verificado /> <h2>Design minimalista</h2></li>
             </ul>
           </div>
 
@@ -63,7 +54,6 @@ const Pag2 = () => {
 // Página 3
 const Pag3 = () => {
   const navigate = useNavigate();
-  const handleCheck = () => {};
 
   return (
     <div id="horizontal">
@@ -80,22 +70,10 @@ const Pag3 = () => {
 
         <div id="listap3">
           <ul>
-            <li>
-              <Check onClick={handleCheck} />
-              <h2>Manter a bebida gelada ou quente</h2>
-            </li>
-            <li>
-              <Check onClick={handleCheck} />
-              <h2>Combina com qualquer ambiente</h2>
-            </li>
-            <li>
-              <Check onClick={handleCheck} />
-              <h2>Fácil de lavar</h2>
-            </li>
-            <li>
-              <Check onClick={handleCheck} />
-              <h2>Ideal para quem curte estilo “All Black”</h2>
-            </li>
+            <li><Check /> <h2>Manter a bebida gelada ou quente</h2></li>
+            <li><Check /> <h2>Combina com qualquer ambiente</h2></li>
+            <li><Check /> <h2>Fácil de lavar</h2></li>
+            <li><Check /> <h2>Ideal para quem curte estilo “All Black”</h2></li>
           </ul>
         </div>
 
@@ -122,50 +100,37 @@ const Pag4 = () => {
 
       <div className="anelp4"></div>
 
-      <div id="containers">
-        <div id="c1">
-          <div id="Estrelas">
-            <Estrela /> <Estrela /> <Estrela /> <Estrela /> <Estrela />
+      {[1, 2, 3, 4].map((num) => (
+        <div id={`containers${num}`} key={num}>
+          <div id={`c${num}`}>
+            <div id="Estrelas">
+              <Estrela /> <Estrela /> <Estrela /> <Estrela /> <Estrela />
+            </div>
+            <p>“Comentário de exemplo {num}.”</p>
+            <p>-Usuário {num}</p>
           </div>
-          <p>“O atendimento foi excelente e a entrega super rápida. Recomendo demais a loja e seus produtos!”</p>
-          <p>-Carla A.</p>
         </div>
-      </div>
-
-      <div id="containers">
-        <div id="c2">
-          <div id="Estrelas">
-            <Estrela /> <Estrela /> <Estrela /> <Estrela /> <Estrela />
-          </div>
-          <p>“Atendimento excelente, recomendo muito!”</p>
-          <p>-Bruno T.</p>
-        </div>
-      </div>
-
-      <div id="containers">
-        <div id="c3">
-          <div id="Estrelas">
-            <Estrela /> <Estrela /> <Estrela /> <Estrela /> <Estrela />
-          </div>
-          <p>“Já comprei mais de um produto na loja e todos chegaram super bem embalados. A qualidade é impecável!”</p>
-          <p>-Lucas M.</p>
-        </div>
-      </div>
-
-      <div id="containers">
-        <div id="c4">
-          <div id="Estrelas">
-            <Estrela /> <Estrela /> <Estrela /> <Estrela /> <Estrela />
-          </div>
-          <p>“Design moderno, combina com tudo.”</p>
-          <p>-João</p>
-        </div>
-      </div>
+      ))}
 
       <Seta direcao="arrow_back" onClick={() => navigate("/pag3")} className="seta-esquerda" />
-      <Seta direcao="arrow_forward" onClick={() => navigate("/")} className="seta-direita" />
+      <Seta direcao="arrow_forward" onClick={() => navigate("/pag5")} className="seta-direita" />
     </div>
   );
+};
+
+//Página 5 - Produtos
+
+const Pag5 = () => {
+  const navigate = useNavigate();
+
+  return (
+    <div id="">
+
+      <div id="produto">
+         <img src={adicionar} alt="adicionar" />
+      </div>
+    </div>
+     );
 };
 
 // Página Home
@@ -206,26 +171,59 @@ const Home = () => {
 // Página Login
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useContext(UserContext);
+
+  const [form, setForm] = useState({ email: "", senha: "" });
+  const [erro, setErro] = useState("");
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErro("");
+
+    if (!form.email || !form.senha) {
+      setErro("Preencha todos os campos.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3001/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        login(result.usuario);
+        navigate("/perfil");
+      } else {
+        setErro(result.message || "E-mail ou senha incorretos.");
+      }
+    } catch (error) {
+      console.error("Erro ao conectar com o servidor:", error);
+      setErro("Erro ao conectar com o servidor. Verifique se o backend está rodando.");
+    }
+  };
 
   return (
     <div id="login">
       <div id="quad">
-        <form>
-          <h2>Login</h2>
-
-          <label htmlFor="email">E-mail</label>
-          <input type="text" id="email" name="email" />
-
-          <label htmlFor="senha">Senha</label>
-          <input type="password" id="senha" name="senha" />
-
-          <button type="submit">Avançar</button>
-          <button type="button" onClick={() => navigate("/cadastro")}>
-            Criar conta
-          </button>
-
-          <button type="button">Recuperar Senha</button>
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <input type="email" name="email" placeholder="E-mail" value={form.email} onChange={handleChange} />
+          <input type="password" name="senha" placeholder="Senha" value={form.senha} onChange={handleChange} />
+          <button type="submit">Entrar</button>
         </form>
+
+        {erro && <p className="erro">{erro}</p>}
+        <p className="trocaTela" onClick={() => navigate("/cadastro")}>
+          Ainda não tem conta? Cadastre-se
+        </p>
       </div>
     </div>
   );
@@ -234,6 +232,8 @@ const Login = () => {
 // Página Cadastro
 const Cadastro = () => {
   const navigate = useNavigate();
+  const { login } = useContext(UserContext);
+
   const [form, setForm] = useState({
     email: "",
     senha: "",
@@ -249,16 +249,14 @@ const Cadastro = () => {
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState(false);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErro("");
     setSucesso(false);
 
-    if (!form.email || !form.senha || !form.confirmar || !form.nome || !form.nascimento || !form.telefone || !form.tipo) {
+    if (!form.email || !form.senha || !form.confirmar || !form.nome) {
       setErro("Preencha todos os campos obrigatórios.");
       return;
     }
@@ -274,90 +272,49 @@ const Cadastro = () => {
       return;
     }
 
-    if (form.tipo === "fisica" && !form.cpf) {
-      setErro("Digite o CPF.");
-      return;
-    }
-    if (form.tipo === "juridica" && !form.cnpj) {
-      setErro("Digite o CNPJ.");
-      return;
-    }
+    const { confirmar, ...dataToSend } = form;
 
-    navigate("/perfil");
+    try {
+      const response = await fetch("http://localhost:3001/api/cadastro", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend),
+      });
 
-    setSucesso(true);
-    setForm({
-      email: "",
-      senha: "",
-      confirmar: "",
-      nome: "",
-      nascimento: "",
-      telefone: "",
-      tipo: "",
-      cpf: "",
-      cnpj: "",
-    });
+      const result = await response.json();
+
+      if (response.ok) {
+        setSucesso(true);
+        setErro("");
+        login(result.cliente);
+        setTimeout(() => navigate("/perfil"), 1000);
+      } else {
+        setErro(result.message || "Erro no cadastro. Tente novamente.");
+      }
+    } catch (error) {
+      console.error("Erro ao conectar com o servidor:", error);
+      setErro("Erro ao conectar com o servidor. Verifique se o backend está rodando.");
+    }
   };
 
   return (
     <div id="login">
       <div id="quad">
+        <h2>Cadastro</h2>
         <form onSubmit={handleSubmit}>
-          <h2>Cadastro</h2>
-
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" value={form.email} onChange={handleChange} />
-
-          <label htmlFor="senha">Senha</label>
-          <input type="password" id="senha" name="senha" value={form.senha} onChange={handleChange} />
-
-          <label htmlFor="confirmar">Confirmar senha</label>
-          <input type="password" id="confirmar" name="confirmar" value={form.confirmar} onChange={handleChange} />
-
-          <label htmlFor="nome">Nome completo</label>
-          <input type="text" id="nome" name="nome" value={form.nome} onChange={handleChange} />
-
-          <div className="linha-dupla">
-            <div>
-              <label htmlFor="nascimento">Data de nascimento</label>
-              <input type="date" id="nascimento" name="nascimento" value={form.nascimento} onChange={handleChange} />
-            </div>
-
-            {form.tipo === "fisica" && (
-              <div>
-                <label htmlFor="cpf">CPF</label>
-                <input type="text" id="cpf" name="cpf" value={form.cpf} onChange={handleChange} placeholder="000.000.000-00" />
-              </div>
-            )}
-
-            {form.tipo === "juridica" && (
-              <div>
-                <label htmlFor="cnpj">CNPJ</label>
-                <input type="text" id="cnpj" name="cnpj" value={form.cnpj} onChange={handleChange} placeholder="00.000.000/0000-00" />
-              </div>
-            )}
-          </div>
-
-          <div className="tipo-pessoa">
-            <label>
-              <input type="radio" name="tipo" value="fisica" checked={form.tipo === "fisica"} onChange={handleChange} /> Pessoa física
-            </label>
-            <label>
-              <input type="radio" name="tipo" value="juridica" checked={form.tipo === "juridica"} onChange={handleChange} /> Pessoa jurídica
-            </label>
-          </div>
-
-          <label htmlFor="telefone">Telefone</label>
-          <input type="text" id="telefone" name="telefone" value={form.telefone} onChange={handleChange} />
-
-          <div className="botoes">
-            <button type="submit" className="criar">Criar conta</button>
-            <button type="button" onClick={() => navigate("/login")}>Voltar</button>
-          </div>
-
-          {erro && <p className="erro">{erro}</p>}
-          {sucesso && <p className="sucesso">Cadastro realizado com sucesso!</p>}
+          <input type="text" name="nome" placeholder="Nome completo" value={form.nome} onChange={handleChange} />
+          <input type="email" name="email" placeholder="E-mail" value={form.email} onChange={handleChange} />
+          <input type="password" name="senha" placeholder="Senha" value={form.senha} onChange={handleChange} />
+          <input type="password" name="confirmar" placeholder="Confirmar senha" value={form.confirmar} onChange={handleChange} />
+          <button type="submit">Cadastrar</button>
         </form>
+
+        {erro && <p className="erro">{erro}</p>}
+        {sucesso && <p className="sucesso">Cadastro realizado com sucesso!</p>}
+
+        <p className="trocaTela" onClick={() => navigate("/login")}>
+          Já tem conta? Faça login
+        </p>
       </div>
     </div>
   );
@@ -366,36 +323,26 @@ const Cadastro = () => {
 // Página Perfil
 const Perfil = () => {
   const navigate = useNavigate();
+  const { usuario, logout } = useContext(UserContext);
 
   return (
     <div id="login">
       <div id="quad">
-        <div className="perfil-foto">
-          <img src="https://via.placeholder.com/80" alt="Foto de perfil" />
-        </div>
-
-        <input type="text" value="usuario@exemplo.com" readOnly />
-        <input type="password" value="*******" readOnly />
-        <input type="text" placeholder="Nome" />
-
-        <div className="linha-dupla">
-          <input type="text" value="15/09/2002" readOnly />
-          <input type="text" value="123.456.789-10" readOnly />
-        </div>
-
-        <input type="text" value="(54)98756-4562" readOnly />
-
-        <div className="botoes">
-          <button className="salvar">Salvar</button>
-          <button className="cancelar" onClick={() => navigate("/")}>Cancelar</button>
-        </div>
+        <h2>Perfil do Usuário</h2>
+        <p>{usuario ? usuario.nome : "Usuário Anônimo"}</p>
+        <button className="cancelar" onClick={() => navigate("/")}>
+          Voltar
+        </button>
+        {usuario && <button onClick={logout}>Sair</button>}
       </div>
     </div>
   );
 };
 
-// App principal
+/* ==================== APP PRINCIPAL ==================== */
 export default function App() {
+  const { usuario } = useContext(UserContext);
+
   return (
     <>
       <nav className="menuzinho">
@@ -406,28 +353,19 @@ export default function App() {
             </Link>
           </li>
           <li>
-            <Link to="/login" className="btn-login">Login</Link>
-=======
-import './App.css';
-import { Routes, Route, Link } from 'react-router-dom';
-import Login from './login'; // importa a página de login
-
-function App() {
-  return (
-    <div>
-      {/* Menu */}
-      <nav className="menuzinho">
-        <ul>
-          <li><Link to="/">logo loja</Link></li>
-          <li><Link to="/">NomeLoja</Link></li>
-          <li id="mDiferente">
-            <Link to="/login"><button>Login</button></Link>
->>>>>>> 7b34aefe12918dbaf8592671d0aa6c38b9b68edb
+            {usuario ? (
+              <Link to="/perfil" className="btn-login">
+                Ver Perfil ({usuario.nome.split(" ")[0]})
+              </Link>
+            ) : (
+              <Link to="/login" className="btn-login">
+                Login
+              </Link>
+            )}
           </li>
         </ul>
       </nav>
 
-<<<<<<< HEAD
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -436,27 +374,8 @@ function App() {
         <Route path="/pag2" element={<Pag2 />} />
         <Route path="/pag3" element={<Pag3 />} />
         <Route path="/pag4" element={<Pag4 />} />
+         <Route path="/pag5" element={<Pag5 />} />
       </Routes>
     </>
   );
 }
-=======
-      {/* Rotas */}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </div>
-  );
-}
-
-function Home() {
-  return (
-    <div>
-      <h1>Bem-vindo à Home!</h1>
-    </div>
-  );
-}
-
-export default App;
->>>>>>> 7b34aefe12918dbaf8592671d0aa6c38b9b68edb
