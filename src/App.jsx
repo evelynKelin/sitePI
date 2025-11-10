@@ -1,10 +1,19 @@
 // src/App.jsx
 import React, { useState, useContext } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
+
 
 import copo from "./assets/img/copo.png";
 import logo from "./assets/img/logo.png";
 import adicionar from "./assets/img/adicionar.png";
+import prod1 from "./assets/img/prod1.png";
+import prod2 from "./assets/img/prod2.png";
+import prod3 from "./assets/img/prod3.png";
+import prod4 from "./assets/img/prod4.png";
+import prod5 from "./assets/img/prod5.png";
+import prod6 from "./assets/img/prod6.png";
+import prod7 from "./assets/img/prod7.png";
+import prod8 from "./assets/img/prod8.png";
 
 import "./App.css";
 
@@ -120,18 +129,252 @@ const Pag4 = () => {
 
 //Página 5 - Produtos
 
+// Array de produtos
+
+const produtos = [
+  { id: 1, nome: "Washbag", img: prod1, imagem: adicionar },
+  { id: 2, nome: "Copo Térmico Preto", img: prod2, imagem: adicionar },
+  { id: 3, nome: "Kit Washbag", img: prod3, imagem: adicionar },
+  { id: 4, nome: "Garrafa Térmica", img: prod4, imagem: adicionar },
+  { id: 5, nome: "Colar Black", img: prod5, imagem: adicionar },
+  { id: 6, nome: "Bomba para Chimarrão", img: prod6, imagem: adicionar },
+  { id: 7, nome: "Colar Banshee", img: prod7, imagem: adicionar },
+  { id: 8, nome: "Bolsa", img: prod8, imagem: adicionar },
+];
+
+// 🔹 Tabela de preços
+const precos = {
+  1: 160,
+  2: 120,
+  3: 200,
+  4: 180,
+  5: 90,
+  6: 75,
+  7: 110,
+  8: 140,
+};
+
+// Página 5 - Produtos
 const Pag5 = () => {
   const navigate = useNavigate();
+  const linha1 = produtos.slice(0, 4);
+  const linha2 = produtos.slice(4, 8);
 
   return (
-    <div id="">
-
-      <div id="produto">
-         <img src={adicionar} alt="adicionar" />
+    <div id="produtos-container">
+      <div className="linha">
+        {linha1.map((produto) => (
+          <div key={produto.id} className="prod">
+            <img src={produto.img} alt={produto.nome} className="foto-produto" />
+            <img
+              src={produto.imagem}
+              alt="Adicionar"
+              className="cruz"
+              onClick={() => navigate(`/produto/${produto.id}`)}
+            />
+          </div>
+        ))}
       </div>
+
+      <div className="linha">
+        {linha2.map((produto) => (
+          <div key={produto.id} className="prod">
+            <img src={produto.img} alt={produto.nome} className="foto-produto" />
+            <img
+              src={produto.imagem}
+              alt="Adicionar"
+              className="cruz"
+              onClick={() => navigate(`/produto/${produto.id}`)}
+            />
+          </div>
+        ))}
+      </div>
+
+      <Seta direcao="arrow_back" onClick={() => navigate("/")} className="seta-esquerda" />
     </div>
-     );
+  );
 };
+
+// Página 6 - Detalhe do produto
+const Pag6 = ({ adicionarAoCarrinho }) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const produto = produtos.find((p) => p.id === parseInt(id));
+
+  if (!produto) {
+    return <h1>Produto não encontrado!</h1>;
+  }
+
+  const descricoes = {
+    1: "Feita para acompanhar seu ritmo, a Washibag une praticidade e estilo em cada detalhe...",
+    2: "Leve seu café ou chá com estilo. Este copo térmico preto combina elegância e praticidade...",
+    3: "Pensado para quem valoriza organização e estilo, o Kit Washbag oferece praticidade em dobro...",
+    4: "Com acabamento fosco e capacidade térmica prolongada, a Garrafa Térmica Black é ideal...",
+    5: "Discreto e cheio de personalidade, o Colar Black é o acessório ideal...",
+    6: "A Bomba Banshee une tradição e design contemporâneo...",
+    7: "O Colar Banshee é delicado, elegante e cheio de personalidade...",
+    8: "Resistente, prática e com um visual imponente. A Garrafa de Metal Black é ideal...",
+  };
+
+  return (
+    <div id="pagina6">
+      <div className="coluna-esquerda">
+        <img src={produto.img} alt={produto.nome} className="imagem-pagina6" />
+      </div>
+
+      <div className="coluna-direita">
+        <h1>{produto.nome}</h1>
+        <p>{descricoes[produto.id]}</p>
+        <h3>Preço: R${precos[produto.id]}</h3>
+
+        <div className="botoes">
+          <button
+            className="whatsapp-btn"
+            onClick={() => window.open("https://wa.me/5554991903324", "_blank")}
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
+              alt="WhatsApp"
+            />
+            WhatsApp
+          </button>
+
+          <button
+            className="cart-btn"
+            onClick={() => {
+              adicionarAoCarrinho({
+                id: produto.id,
+                nome: produto.nome,
+                preco: precos[produto.id],
+                imagem: produto.img,
+              });
+              navigate("/pag7");
+            }}
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/107/107831.png"
+              alt="Carrinho"
+            />
+            <span>MY CART</span>
+            <span className="divider"></span>
+            <span>+</span>
+          </button>
+        </div>
+      </div>
+
+      <Seta direcao="arrow_back" onClick={() => navigate("/pag5")} className="seta-esquerda" />
+    </div>
+  );
+};
+
+// Página 7 - Carrinho
+const Pag7 = ({ cart, setCart }) => {
+  const navigate = useNavigate();
+  const shipping = 10;
+
+  const alterarQuantidade = (id, tipo) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              quantidade:
+                tipo === "mais"
+                  ? item.quantidade + 1
+                  : item.quantidade > 1
+                  ? item.quantidade - 1
+                  : 1,
+            }
+          : item
+      )
+    );
+  };
+
+  const subtotal = cart.reduce(
+    (acc, item) => acc + item.preco * item.quantidade,
+    0
+  );
+  const total = subtotal + shipping;
+  const totalItens = cart.reduce((acc, item) => acc + item.quantidade, 0);
+
+  return (
+    <div className="pag7-body">
+    
+
+      <h1 className="pag7-title">Carrinho</h1>
+
+      <main className="pag7-main">
+        <section className="pag7-cart-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map((item) => (
+                <tr key={item.id}>
+                  <td>
+                    <div className="pag7-product-info">
+                      <img src={item.imagem} alt={item.nome} />
+                      <div>
+                        <strong>{item.nome}</strong>
+                        <br /> 
+                      </div>
+                    </div>
+                  </td>
+                  <td>R${item.preco}</td>
+                  <td>
+                    <div className="pag7-quantity-control">
+                      <button onClick={() => alterarQuantidade(item.id, "menos")}>
+                        −
+                      </button>
+                      <input type="text" value={item.quantidade} readOnly />
+                      <button onClick={() => alterarQuantidade(item.id, "mais")}>
+                        +
+                      </button>
+                    </div>
+                  </td>
+                  <td>R${item.preco * item.quantidade}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+         
+        </section>
+
+        <aside className="pag7-summary">
+          <h3>Resumo do Pedido</h3>
+          <div className="pag7-summary-row">
+            <span>Itens</span>
+            <span>{totalItens}</span>
+          </div>
+          <div className="pag7-summary-row">
+            <span>Subtotal</span>
+            <span>R${subtotal}</span>
+          </div>
+          <div className="pag7-summary-row">
+            <span>Frete</span>
+            <span>R${shipping}</span>
+          </div>
+          <hr />
+          <div className="pag7-summary-row">
+            <strong>Total</strong>
+            <strong>R${total}</strong>
+          </div>
+          <button className="pag7-checkout-btn">Finalizar Compra</button>
+        </aside>
+      </main>
+       <button className="pag7-continue-btn" onClick={() => navigate("/produtos")}>
+        ← Continuar comprando
+      </button>
+    </div>
+  );
+};
+
 
 // Página Home
 const Home = () => {
@@ -343,6 +586,25 @@ const Perfil = () => {
 export default function App() {
   const { usuario } = useContext(UserContext);
 
+  // ✅ Estado do carrinho
+  const [cart, setCart] = useState([]);
+
+  // ✅ Função para adicionar produtos ao carrinho
+  const adicionarAoCarrinho = (produto) => {
+    setCart((prev) => {
+      const existente = prev.find((item) => item.id === produto.id);
+      if (existente) {
+        return prev.map((item) =>
+          item.id === produto.id
+            ? { ...item, quantidade: item.quantidade + 1 }
+            : item
+        );
+      } else {
+        return [...prev, { ...produto, quantidade: 1 }];
+      }
+    });
+  };
+
   return (
     <>
       <nav className="menuzinho">
@@ -374,7 +636,11 @@ export default function App() {
         <Route path="/pag2" element={<Pag2 />} />
         <Route path="/pag3" element={<Pag3 />} />
         <Route path="/pag4" element={<Pag4 />} />
-         <Route path="/pag5" element={<Pag5 />} />
+        <Route path="/pag5" element={<Pag5 />} />
+        {/* ✅ Passando a função para a página de detalhes */}
+        <Route path="/produto/:id" element={<Pag6 adicionarAoCarrinho={adicionarAoCarrinho} />} />
+        {/* ✅ Passando cart e setCart para a página do carrinho */}
+        <Route path="/pag7" element={<Pag7 cart={cart} setCart={setCart} />} />
       </Routes>
     </>
   );
