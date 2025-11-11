@@ -368,7 +368,7 @@ const Pag7 = ({ cart, setCart }) => {
           <button className="pag7-checkout-btn">Finalizar Compra</button>
         </aside>
       </main>
-       <button className="pag7-continue-btn" onClick={() => navigate("/produtos")}>
+       <button className="pag7-continue-btn" onClick={() => navigate("/pag5")}>
         ← Continuar comprando
       </button>
     </div>
