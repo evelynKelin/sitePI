@@ -572,7 +572,7 @@ const Perfil = () => {
     <div id="login">
       <div id="quad">
         <h2>Perfil do Usuário</h2>
-        <p>{usuario ? usuario.nome : "Usuário Anônimo"}</p>
+        <p>{usuario ? usuario.nome : "Usuário Antônio"}</p>
         <button className="cancelar" onClick={() => navigate("/")}>
           Voltar
         </button>
