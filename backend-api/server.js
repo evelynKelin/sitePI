@@ -2,11 +2,10 @@
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
-const sequelize = require('./config/database'); // Nosso arquivo de config
-const Cliente = require('./models/Cliente');   // Nosso modelo// ... no topo do server.js
-const Cliente = require('./models/Cliente');
-const Pedido = require('./models/Pedido');     // <-- ADICIONE
-const ItemPedido = require('./models/ItemPedido'); // <-- ADICIONE
+const sequelize = require('./config/database'); 
+const Cliente = require('./models/Cliente');   // <--- SÓ UMA DESSA
+const Pedido = require('./models/Pedido');     
+const ItemPedido = require('./models/ItemPedido');
 
 require('dotenv').config(); // Carrega o .env
 

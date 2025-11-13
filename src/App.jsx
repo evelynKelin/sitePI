@@ -24,7 +24,6 @@ import Verificado from "./Verificado";
 import Check from "./Check";
 import Seta from "./Seta";
 import Estrela from "./Estrela";
-import { UserContext } from "./UserContext";
 
 /* ==================== PÁGINAS ==================== */
 
