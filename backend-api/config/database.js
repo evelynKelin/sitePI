@@ -1,6 +1,6 @@
-/ backend-api/config/database.js
+// backend-api/config/database.js
 const { Sequelize } = require('sequelize');
-require('dotenv').config(); 
+require('dotenv').config(); // Carrega as variáveis do arquivo .env
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,

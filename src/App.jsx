@@ -1,6 +1,9 @@
 // src/App.jsx
 import React, { useState, useContext } from "react";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
+// ... no topo do App.jsx
+import { UserContext } from "./UserContext";
+import PaginaHistorico from './PaginaHistorico'; // <-- ADICIONE
 
 
 import copo from "./assets/img/copo.png";
@@ -268,10 +271,15 @@ const Pag6 = ({ adicionarAoCarrinho }) => {
 };
 
 // Página 7 - Carrinho
+// Página 7 - Carrinho (DENTRO DO App.jsx)
 const Pag7 = ({ cart, setCart }) => {
   const navigate = useNavigate();
+  const { usuario } = useContext(UserContext); // <-- 1. Pegar o usuário logado
+  const [erro, setErro] = useState('');
+  const [loading, setLoading] = useState(false);
   const shipping = 10;
 
+  // Função de alterar quantidade continua igual...
   const alterarQuantidade = (id, tipo) => {
     setCart((prev) =>
       prev.map((item) =>
@@ -297,13 +305,60 @@ const Pag7 = ({ cart, setCart }) => {
   const total = subtotal + shipping;
   const totalItens = cart.reduce((acc, item) => acc + item.quantidade, 0);
 
+  // <-- 2. Função para finalizar a compra
+  const handleFinalizarCompra = async () => {
+    setErro('');
+
+    // 2.1. Verifica se o usuário está logado
+    if (!usuario) {
+      setErro('Você precisa fazer login para finalizar a compra.');
+      setTimeout(() => navigate('/login'), 2000);
+      return;
+    }
+
+    // 2.2. Verifica se o carrinho não está vazio
+    if (cart.length === 0) {
+      setErro('Seu carrinho está vazio.');
+      return;
+    }
+    
+    setLoading(true);
+
+    try {
+      // 2.3. Prepara os dados para enviar à API
+      const dadosPedido = {
+        clienteId: usuario.id,
+        carrinho: cart,
+        total: total, // Envia o total (com frete)
+      };
+
+      const response = await fetch('http://localhost:3001/api/pedidos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dadosPedido),
+      });
+
+      if (!response.ok) {
+        throw new Error('Não foi possível salvar seu pedido.');
+      }
+
+      // 2.4. Se deu certo: limpa o carrinho e navega para o histórico
+      setCart([]);
+      navigate('/historico');
+
+    } catch (err) {
+      setErro(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <div className="pag7-body">
-    
-
       <h1 className="pag7-title">Carrinho</h1>
-
       <main className="pag7-main">
+        {/* A tabela continua igual... */}
         <section className="pag7-cart-table">
           <table>
             <thead>
@@ -322,7 +377,7 @@ const Pag7 = ({ cart, setCart }) => {
                       <img src={item.imagem} alt={item.nome} />
                       <div>
                         <strong>{item.nome}</strong>
-                        <br /> 
+                        <br />
                       </div>
                     </div>
                   </td>
@@ -338,14 +393,14 @@ const Pag7 = ({ cart, setCart }) => {
                       </button>
                     </div>
                   </td>
-                  <td>R${item.preco * item.quantidade}</td>
+                  <td>R${(item.preco * item.quantidade).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-         
         </section>
 
+        {/* O resumo agora tem o botão modificado */}
         <aside className="pag7-summary">
           <h3>Resumo do Pedido</h3>
           <div className="pag7-summary-row">
@@ -354,21 +409,30 @@ const Pag7 = ({ cart, setCart }) => {
           </div>
           <div className="pag7-summary-row">
             <span>Subtotal</span>
-            <span>R${subtotal}</span>
+            <span>R${subtotal.toFixed(2)}</span>
           </div>
           <div className="pag7-summary-row">
             <span>Frete</span>
-            <span>R${shipping}</span>
+            <span>R${shipping.toFixed(2)}</span>
           </div>
           <hr />
           <div className="pag7-summary-row">
             <strong>Total</strong>
-            <strong>R${total}</strong>
+            <strong>R${total.toFixed(2)}</strong>
           </div>
-          <button className="pag7-checkout-btn">Finalizar Compra</button>
+          
+          {/* <-- 3. Botão modificado */}
+          <button 
+            className="pag7-checkout-btn" 
+            onClick={handleFinalizarCompra}
+            disabled={loading} // Desativa o botão enquanto carrega
+          >
+            {loading ? 'Salvando...' : 'Finalizar Compra'}
+          </button>
+          {erro && <p className="erro" style={{textAlign: 'center', marginTop: '10px'}}>{erro}</p>}
         </aside>
       </main>
-       <button className="pag7-continue-btn" onClick={() => navigate("/pag5")}>
+      <button className="pag7-continue-btn" onClick={() => navigate("/pag5")}>
         ← Continuar comprando
       </button>
     </div>
@@ -472,21 +536,24 @@ const Login = () => {
   );
 };
 
-// Página Cadastro
+// Página Cadastro (DENTRO DO SEU App.jsx)
+// Copie e cole este bloco inteiro substituindo o seu componente Cadastro
+
 const Cadastro = () => {
   const navigate = useNavigate();
   const { login } = useContext(UserContext);
 
+  // 1. Atualizar o estado para incluir todos os campos do modelo
   const [form, setForm] = useState({
     email: "",
     senha: "",
     confirmar: "",
     nome: "",
-    nascimento: "",
-    telefone: "",
-    tipo: "",
-    cpf: "",
-    cnpj: "",
+    nascimento: "", // NOVO
+    telefone: "",   // NOVO
+    tipo: "pf",     // NOVO (pf = física, pj = jurídica)
+    cpf: "",        // NOVO
+    cnpj: "",       // NOVO
   });
 
   const [erro, setErro] = useState("");
@@ -499,11 +566,19 @@ const Cadastro = () => {
     setErro("");
     setSucesso(false);
 
-    if (!form.email || !form.senha || !form.confirmar || !form.nome) {
+    // 2. Validar campos
+    if (!form.email || !form.senha || !form.confirmar || !form.nome || !form.nascimento || !form.telefone) {
       setErro("Preencha todos os campos obrigatórios.");
       return;
     }
-
+    if (form.tipo === 'pf' && !form.cpf) {
+      setErro("Preencha o CPF.");
+      return;
+    }
+    if (form.tipo === 'pj' && !form.cnpj) {
+      setErro("Preencha o CNPJ.");
+      return;
+    }
     if (form.senha !== form.confirmar) {
       setErro("As senhas não coincidem.");
       return;
@@ -515,13 +590,14 @@ const Cadastro = () => {
       return;
     }
 
+    // O backend não precisa do "confirmar"
     const { confirmar, ...dataToSend } = form;
 
     try {
       const response = await fetch("http://localhost:3001/api/cadastro", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend),
+        body: JSON.stringify(dataToSend), // Envia o formulário completo
       });
 
       const result = await response.json();
@@ -529,8 +605,8 @@ const Cadastro = () => {
       if (response.ok) {
         setSucesso(true);
         setErro("");
-        login(result.cliente);
-        setTimeout(() => navigate("/perfil"), 1000);
+        login(result.cliente); // Faz o login automático com os dados recebidos
+        setTimeout(() => navigate("/perfil"), 1000); // Redireciona para o perfil
       } else {
         setErro(result.message || "Erro no cadastro. Tente novamente.");
       }
@@ -540,6 +616,7 @@ const Cadastro = () => {
     }
   };
 
+  // 3. Adicionar os novos inputs no JSX
   return (
     <div id="login">
       <div id="quad">
@@ -547,15 +624,40 @@ const Cadastro = () => {
         <form onSubmit={handleSubmit}>
           <input type="text" name="nome" placeholder="Nome completo" value={form.nome} onChange={handleChange} />
           <input type="email" name="email" placeholder="E-mail" value={form.email} onChange={handleChange} />
+          <input type="date" name="nascimento" placeholder="Data de Nascimento" value={form.nascimento} onChange={handleChange} />
+          <input type="text" name="telefone" placeholder="Telefone (com DDD)" value={form.telefone} onChange={handleChange} />
+          
+          {/* --- Seleção de Tipo de Pessoa --- */}
+          <div className="tipo-pessoa">
+            <label>
+              <input type="radio" name="tipo" value="pf" checked={form.tipo === 'pf'} onChange={handleChange} />
+              Pessoa Física
+            </label>
+            <label>
+              <input type="radio" name="tipo" value="pj" checked={form.tipo === 'pj'} onChange={handleChange} />
+              Pessoa Jurídica
+            </label>
+          </div>
+
+          {/* --- Campos Condicionais (CPF/CNPJ) --- */}
+          {form.tipo === 'pf' ? (
+            <input type="text" name="cpf" placeholder="CPF" value={form.cpf} onChange={handleChange} />
+          ) : (
+            <input type="text" name="cnpj" placeholder="CNPJ" value={form.cnpj} onChange={handleChange} />
+          )}
+          
           <input type="password" name="senha" placeholder="Senha" value={form.senha} onChange={handleChange} />
           <input type="password" name="confirmar" placeholder="Confirmar senha" value={form.confirmar} onChange={handleChange} />
-          <button type="submit">Cadastrar</button>
+          
+          <div className="botoes">
+            <button type="submit" style={{width: '100%'}}>Cadastrar</button>
+          </div>
         </form>
 
         {erro && <p className="erro">{erro}</p>}
         {sucesso && <p className="sucesso">Cadastro realizado com sucesso!</p>}
 
-        <p className="trocaTela" onClick={() => navigate("/login")}>
+        <p onClick={() => navigate("/login")}>
           Já tem conta? Faça login
         </p>
       </div>
@@ -641,6 +743,7 @@ export default function App() {
         <Route path="/produto/:id" element={<Pag6 adicionarAoCarrinho={adicionarAoCarrinho} />} />
         {/* ✅ Passando cart e setCart para a página do carrinho */}
         <Route path="/pag7" element={<Pag7 cart={cart} setCart={setCart} />} />
+        <Route path="/historico" element={<PaginaHistorico />} /> {/* <-- ADICIONE */}
       </Routes>
     </>
   );
