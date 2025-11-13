@@ -6,6 +6,7 @@ const sequelize = require('./config/database');
 const Cliente = require('./models/Cliente');   // <--- SÓ UMA DESSA
 const Pedido = require('./models/Pedido');     
 const ItemPedido = require('./models/ItemPedido');
+const Avaliacao = require('./models/Avaliacao');
 
 require('dotenv').config(); // Carrega o .env
 
@@ -147,6 +148,51 @@ app.post('/api/pedidos', async (req, res) => {
   
     } catch (error) {
       console.error('Erro ao buscar pedidos:', error);
+      res.status(500).json({ message: 'Erro interno do servidor.' });
+    }
+  });
+
+/**
+ * ROTA PARA CRIAR UMA AVALIAÇÃO (COMENTÁRIO)
+ */
+app.post('/api/avaliacoes', async (req, res) => {
+    try {
+      const { clienteId, produtoId, produtoNome, nota, comentario } = req.body;
+  
+      const novaAvaliacao = await Avaliacao.create({
+        produtoId,
+        produtoNome,
+        nota,
+        comentario,
+        ClienteId: clienteId, // Associa ao cliente
+      });
+  
+      res.status(201).json({ message: 'Avaliação criada com sucesso!', avaliacao: novaAvaliacao });
+  
+    } catch (error) {
+      console.error('Erro ao criar avaliação:', error);
+      res.status(500).json({ message: 'Erro interno do servidor.' });
+    }
+  });
+  
+  /**
+   * ROTA PARA BUSCAR AVALIAÇÕES DE UM PRODUTO
+   * (Usaremos isso na Pag4 e Pag6)
+   */
+  app.get('/api/avaliacoes/:produtoId', async (req, res) => {
+    try {
+      const { produtoId } = req.params;
+  
+      const avaliacoes = await Avaliacao.findAll({
+        where: { produtoId: produtoId },
+        include: [Cliente], // Inclui os dados do cliente (para mostrar o nome)
+        order: [['createdAt', 'DESC']],
+      });
+  
+      res.status(200).json(avaliacoes);
+  
+    } catch (error) {
+      console.error('Erro ao buscar avaliações:', error);
       res.status(500).json({ message: 'Erro interno do servidor.' });
     }
   });

@@ -3,7 +3,8 @@ import React, { useState, useContext } from "react";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 // ... no topo do App.jsx
 import { UserContext } from "./UserContext";
-import PaginaHistorico from './PaginaHistorico'; // <-- ADICIONE
+import PaginaHistorico from './PaginaHistorico'; 
+import SeletorEstrelas from './SeletorEstrelas';
 
 
 import copo from "./assets/img/copo.png";
@@ -96,8 +97,45 @@ const Pag3 = () => {
 };
 
 // Página 4
+// Página 4 (DENTRO DO App.jsx)
 const Pag4 = () => {
   const navigate = useNavigate();
+  const [avaliacoes, setAvaliacoes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // ID do produto "Modelo Copo" (vamos assumir que é o ID 2: Copo Térmico Preto)
+  const ID_PRODUTO_COPO = 2; 
+
+  useEffect(() => {
+    const fetchAvaliacoes = async () => {
+      try {
+        setLoading(true);
+        // Busca avaliações do produto ID 2
+        const response = await fetch(`http://localhost:3001/api/avaliacoes/${ID_PRODUTO_COPO}`);
+        if (response.ok) {
+          const data = await response.json();
+          setAvaliacoes(data);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar avaliações:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAvaliacoes();
+  }, []); // Roda só uma vez
+
+  // Função para renderizar as estrelas de uma avaliação
+  const RenderEstrelas = ({ nota }) => {
+    return (
+      <div id="Estrelas">
+        {/* Cria um array de 'nota' posições e renderiza uma estrela para cada */}
+        {[...Array(nota)].map((_, i) => <Estrela key={i} />)}
+        {/* Se a nota for menor que 5, preenche com estrelas "vazias" (cinzas) */}
+        {[...Array(5 - nota)].map((_, i) => <Estrela key={`vazia-${i}`} fill="grey" stroke="grey" />)}
+      </div>
+    );
+  };
 
   return (
     <div id="horizontal">
@@ -111,24 +149,30 @@ const Pag4 = () => {
 
       <div className="anelp4"></div>
 
-      {[1, 2, 3, 4].map((num) => (
-        <div id={`containers${num}`} key={num}>
-          <div id={`c${num}`}>
-            <div id="Estrelas">
-              <Estrela /> <Estrela /> <Estrela /> <Estrela /> <Estrela />
+      {/* Mapeamento dinâmico das avaliações */}
+      {loading ? (
+        <div id="c1"><p>Carregando avaliações...</p></div>
+      ) : avaliacoes.length === 0 ? (
+         <div id="c1"><p>Este produto ainda não tem avaliações.</p></div>
+      ) : (
+        // Pega as 4 primeiras avaliações
+        avaliacoes.slice(0, 4).map((avaliacao, index) => (
+          <div id={`containers${index + 1}`} key={avaliacao.id}>
+            <div id={`c${index + 1}`}>
+              <RenderEstrelas nota={avaliacao.nota} />
+              <p>“{avaliacao.comentario || "O usuário não deixou um comentário."}”</p>
+              {/* Incluímos o nome do cliente que veio do 'include' na API */}
+              <p>- {avaliacao.Cliente ? avaliacao.Cliente.nome : "Usuário Anônimo"}</p>
             </div>
-            <p>“Comentário de exemplo {num}.”</p>
-            <p>-Usuário {num}</p>
           </div>
-        </div>
-      ))}
+        ))
+      )}
 
       <Seta direcao="arrow_back" onClick={() => navigate("/pag3")} className="seta-esquerda" />
       <Seta direcao="arrow_forward" onClick={() => navigate("/pag5")} className="seta-direita" />
     </div>
   );
 };
-
 //Página 5 - Produtos
 
 // Array de produtos
@@ -664,25 +708,116 @@ const Cadastro = () => {
   );
 };
 
-// Página Perfil
+// Página Perfil (DENTRO DO App.jsx)
 const Perfil = () => {
   const navigate = useNavigate();
   const { usuario, logout } = useContext(UserContext);
 
+  // Estados para o formulário de avaliação
+  const [formAvaliacao, setFormAvaliacao] = useState({
+    produtoId: '2', // Vamos focar no 'Copo' (ID 2) por enquanto
+    nota: 0,
+    comentario: ''
+  });
+  const [erroAvaliacao, setErroAvaliacao] = useState('');
+  const [sucessoAvaliacao, setSucessoAvaliacao] = useState('');
+
+  const handleFormChange = (e) => {
+    setFormAvaliacao({ ...formAvaliacao, [e.target.name]: e.target.value });
+  };
+
+  const handleNotaChange = (novaNota) => {
+    setFormAvaliacao({ ...formAvaliacao, nota: novaNota });
+  };
+
+  const handleSubmitAvaliacao = async (e) => {
+    e.preventDefault();
+    setErroAvaliacao('');
+    setSucessoAvaliacao('');
+
+    if (formAvaliacao.nota === 0) {
+      setErroAvaliacao('Por favor, selecione uma nota (de 1 a 5 estrelas).');
+      return;
+    }
+
+    // Pega o nome do produto da lista (do App.jsx)
+    const produtoAvaliado = produtos.find(p => p.id === parseInt(formAvaliacao.produtoId));
+
+    try {
+      const dadosAvaliacao = {
+        ...formAvaliacao,
+        clienteId: usuario.id,
+        produtoNome: produtoAvaliado.nome,
+      };
+
+      const response = await fetch("http://localhost:3001/api/avaliacoes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dadosAvaliacao),
+      });
+
+      if (!response.ok) {
+        throw new Error('Falha ao enviar avaliação.');
+      }
+
+      setSucessoAvaliacao('Avaliação enviada com sucesso!');
+      // Limpa o formulário
+      setFormAvaliacao({ ...formAvaliacao, nota: 0, comentario: '' });
+
+    } catch (err) {
+      setErroAvaliacao(err.message);
+    }
+  };
+
   return (
     <div id="login">
-      <div id="quad">
-        <h2>Perfil do Usuário</h2>
-        <p>{usuario ? usuario.nome : "Usuário Antônio"}</p>
-        <button className="cancelar" onClick={() => navigate("/")}>
+      <div id="quad" style={{ width: '600px', textAlign: 'left' }}>
+        <h2>Perfil de {usuario ? usuario.nome.split(' ')[0] : "Usuário"}</h2>
+        <p><strong>Nome:</strong> {usuario ? usuario.nome : "N/A"}</p>
+        <p><strong>Email:</strong> {usuario ? usuario.email : "N/A"}</p>
+
+        <button className="cancelar" onClick={() => navigate("/")} style={{width: '48%'}}>
           Voltar
         </button>
-        {usuario && <button onClick={logout}>Sair</button>}
+        {usuario && <button onClick={logout} style={{width: '48%'}}>Sair</button>}
+
+        {/* --- Formulário de Avaliação --- */}
+        <hr style={{ margin: '30px 0' }} />
+        <h3>Deixar uma Avaliação</h3>
+        <form onSubmit={handleSubmitAvaliacao}>
+          <label>Produto:</label>
+          {/* Usamos a lista de produtos do App.jsx */}
+          <select 
+            name="produtoId" 
+            value={formAvaliacao.produtoId} 
+            onChange={handleFormChange}
+            style={{ width: '100%', padding: '10px', background: '#333', color: 'white', border: 'none', borderRadius: '5px', marginBottom: '15px' }}
+          >
+            {produtos.map(p => (
+              <option key={p.id} value={p.id}>{p.nome}</option>
+            ))}
+          </select>
+
+          <label>Nota:</label>
+          <SeletorEstrelas nota={formAvaliacao.nota} onChange={handleNotaChange} />
+
+          <label>Comentário (opcional):</label>
+          <textarea
+            name="comentario"
+            value={formAvaliacao.comentario}
+            onChange={handleFormChange}
+            placeholder="Escreva sua avaliação aqui..."
+            style={{ width: '100%', minHeight: '80px', background: '#333', color: 'white', border: 'none', borderRadius: '5px', padding: '10px' }}
+          />
+
+          <button type="submit" style={{ width: '100%', marginTop: '20px' }}>Enviar Avaliação</button>
+          {erroAvaliacao && <p className="erro">{erroAvaliacao}</p>}
+          {sucessoAvaliacao && <p className="sucesso">{sucessoAvaliacao}</p>}
+        </form>
       </div>
     </div>
   );
 };
-
 /* ==================== APP PRINCIPAL ==================== */
 export default function App() {
   const { usuario } = useContext(UserContext);
@@ -738,11 +873,12 @@ export default function App() {
         <Route path="/pag3" element={<Pag3 />} />
         <Route path="/pag4" element={<Pag4 />} />
         <Route path="/pag5" element={<Pag5 />} />
-        {/* ✅ Passando a função para a página de detalhes */}
+        {/* Passando a função para a página de detalhes */}
         <Route path="/produto/:id" element={<Pag6 adicionarAoCarrinho={adicionarAoCarrinho} />} />
-        {/* ✅ Passando cart e setCart para a página do carrinho */}
+        {/* Passando cart e setCart para a página do carrinho */}
         <Route path="/pag7" element={<Pag7 cart={cart} setCart={setCart} />} />
-        <Route path="/historico" element={<PaginaHistorico />} /> {/* <-- ADICIONE */}
+        {/* Rota do Histórico */}
+        <Route path="/historico" element={<PaginaHistorico />} /> 
       </Routes>
     </>
   );
