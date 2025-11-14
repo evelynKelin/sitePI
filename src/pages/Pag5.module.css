@@ -1,0 +1,54 @@
+/* src/pages/Pag5.module.css */
+.produtosContainer {
+    background-color: rgb(32,35,42);
+    padding: 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .linha {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+  
+  .prod {
+    width: 200px;
+    height: 200px;
+    background-color: grey;
+    border-radius: 10%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    box-sizing: border-box;
+  }
+  
+  .cruz {
+    background-color: rgb(163,0,255);
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  .cruz:hover {
+    background-color: rgb(190, 80, 255);
+    transform: scale(1.15);
+    box-shadow: 0 0 10px rgba(163, 0, 255, 0.6);
+  }
+  
+  .fotoProduto {
+    height: 100px;
+    width: 100px;
+  }

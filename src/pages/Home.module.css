@@ -1,0 +1,122 @@
+/* src/pages/Home.module.css (Totalmente Refeito) */
+
+.homeContainer {
+  /* Fundo dividido sutil */
+  background-image: linear-gradient(to right, rgb(32,35,42) 0%, rgb(32,35,42) 50%, rgb(43,47,56) 50%, rgb(43,47,56) 100%);
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 60px; /* Espaço para o menu e laterais */
+  box-sizing: border-box;
+  overflow: hidden;
+  gap: 40px; /* Espaço entre as colunas */
+}
+
+/* === Coluna da Esquerda (Texto) === */
+.colunaTexto {
+  flex: 1; /* Ocupa 1 parte do espaço */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start; /* Alinha o texto à esquerda */
+  gap: 25px; /* Espaço entre os textos */
+  z-index: 10;
+  max-width: 500px; /* Limita a largura do texto */
+}
+
+/* Botão "Call to Action" */
+.ctaButton {
+  background-color: rgb(163,0,255);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: "Archivo Black", sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.ctaButton:hover {
+  background-color: rgb(190, 80, 255);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(163, 0, 255, 0.5);
+}
+
+/* === Coluna da Direita (Imagem) === */
+.colunaImagem {
+  flex: 1; /* Ocupa 1 parte do espaço */
+  position: relative; /* Para o anel se posicionar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 300px; /* Largura mínima */
+}
+
+.imagemCopo {
+  z-index: 2000;
+}
+
+.imagemCopo img {
+  width: 100%;
+  max-width: 650px;
+  height: auto;
+  animation: float 6s ease-in-out infinite; /* Efeito de flutuação */
+}
+
+.anelFundo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  border: 30px solid rgb(163,0,255);
+  border-radius: 50%;
+  z-index: 1500;
+  opacity: 0.7; /* Um pouco mais sutil */
+}
+
+/* Animação de flutuação */
+@keyframes float {
+	0% {
+		transform: translatey(0px);
+	}
+	50% {
+		transform: translatey(-20px);
+	}
+	100% {
+		transform: translatey(0px);
+	}
+}
+
+/* === Media Query para Celulares === */
+@media (max-width: 768px) {
+  .homeContainer {
+    flex-direction: column-reverse; /* Imagem vem PRIMEIRO */
+    padding: 120px 30px 40px 30px; /* Mais espaço no topo, menos nas laterais */
+    text-align: center; /* Centraliza tudo no celular */
+  }
+
+  .colunaTexto {
+    align-items: center; /* Centraliza o botão e textos */
+    max-width: 100%;
+  }
+
+  .colunaImagem {
+    width: 100%;
+  }
+
+  .anelFundo {
+    width: 200px;
+    height: 200px;
+    border-width: 20px;
+  }
+
+  .imagemCopo img {
+    max-width: 300px; /* Diminui a imagem no celular */
+  }
+}

@@ -1,0 +1,35 @@
+/* src/PaginaHistorico.module.css (Novo Arquivo) */
+
+.paginaFundo {
+    background-color: #000;
+    min-height: 100vh; /* Garante que o fundo cubra a tela */
+    padding-top: 100px; /* Espaço para o menu */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinha no topo */
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+  }
+  
+  .quad {
+    background: rgba(30, 30, 30, 0.9);
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+    width: 800px; /* Largura definida no seu JSX */
+    text-align: left; /* Definido no seu JSX */
+    margin-bottom: 50px; /* Espaço no final */
+  }
+  
+  .quad h2 {
+    margin-bottom: 30px;
+    font-size: 26px;
+    font-weight: 600;
+  }
+  
+  .erro {
+    color: #ff5555;
+    font-size: 13px;
+    margin-top: 10px;
+  }

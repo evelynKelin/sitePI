@@ -1,0 +1,125 @@
+/* src/pages/Pag6.module.css */
+.pagina6 {
+    min-height: 100vh;
+    background-image: linear-gradient(
+      to right,
+      rgb(43, 47, 56) 0%,
+      rgb(43, 47, 56) 35%,
+      rgb(32, 35, 42) 35%,
+      rgb(32, 35, 42) 100%
+    );
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Poppins", sans-serif;
+    padding: 60px;
+    gap: 80px;
+    box-sizing: border-box;
+  }
+  
+  .colunaEsquerda,
+  .colunaDireita {
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .colunaEsquerda {
+    justify-content: center;
+    padding-right: 20px;
+  }
+  
+  .imagemPagina6 {
+    max-width: 420px;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+  
+  .colunaDireita {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding-left: 20px;
+    max-width: 700px;
+  }
+  
+  /* h1, p, h3 são estilizados globalmente, mas podemos sobrepor */
+  .colunaDireita h1 {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 64px;
+    color: rgb(227, 193, 165);
+    margin: 0 0 20px 0;
+  }
+  
+  .colunaDireita p {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 28px;
+    color: grey;
+    margin-bottom: 20px;
+    max-width: 600px;
+  }
+  
+  .botoes {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+  }
+  
+  .whatsappBtn {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 22px;
+    font-family: "Archivo Black", sans-serif;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .whatsappBtn img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .whatsappBtn:hover {
+    background-color: #111;
+  }
+  
+  .cartBtn {
+    background-color: #d9d9d9;
+    color: #000;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 24px;
+    font-family: "Archivo Black", sans-serif;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .cartBtn img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .cartBtn:hover {
+    background-color: #c4c4c4;
+  }
+  
+  .divider {
+    width: 1px;
+    height: 18px;
+    background-color: #000;
+    margin: 0 6px;
+  }

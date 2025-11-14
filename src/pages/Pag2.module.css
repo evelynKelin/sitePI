@@ -1,0 +1,68 @@
+/* src/pages/Pag2.module.css */
+.vertical {
+    background-image: linear-gradient(to right, rgb(32,35,42) 0%, rgb(32,35,42) 50%, rgb(43,47,56) 50%, rgb(43,47,56) 100%);
+  }
+  
+  .copop2 {
+    position: fixed;
+    top: 60%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+  }
+  
+  .copop2 img {
+    width: 600px;
+    height: auto;
+  }
+  
+  .anelp2 {
+    position: absolute;
+    top: 33%;
+    left: 72%;
+    transform: translate(-50%, -50%);
+    width: 380px;
+    height: 380px;
+    border: 30px solid rgb(163,0,255);
+    border-radius: 50%;
+    background-color: transparent;
+    z-index: 1500;
+  }
+  
+  .pai2 {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+  }
+  
+  .f1p2 {
+    max-width: 500px;
+    width: 100%;
+    padding: 10px;
+    position: absolute;
+    color: white; 
+    top: 10%; 
+    left: 6%;
+  }
+  
+  .listap2 {
+    padding: 10px;
+    position: absolute;
+    left: 15%; 
+    top: 50%;
+    color: rgb(227,193,165);
+    line-height: 2;
+  }
+  
+  /* .icone-verificado é global, mas o layout da lista é local */
+  .listap2 ul {
+    list-style: none; 
+    padding: 0;       
+    margin: 0;        
+  }
+  
+  .listap2 li {
+    display: flex;        
+    align-items: center;  
+    gap: 10px;            
+  }

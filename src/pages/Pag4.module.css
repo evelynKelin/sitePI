@@ -1,0 +1,92 @@
+/* src/pages/Pag4.module.css */
+/* Fundo pode ser reutilizado da pag3 ou definido aqui */
+.horizontal {
+    min-height: 100vh; 
+    background-image: linear-gradient(
+      to bottom,
+      rgb(43,47,56) 0%,
+      rgb(43,47,56) 30%,
+      rgb(32,35,42) 30%,
+      rgb(32,35,42) 100%
+    );
+    position: relative;
+  }
+  
+  .titulop4 {
+    max-width: 600px;
+    width: 100%;
+    padding: 10px;
+    position: absolute;
+    top: 5%; 
+    left: 40%;
+  }
+  
+  .copop4 {
+    position: fixed;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+  }
+  
+  .copop4 img {
+    width: 600px;
+    height: auto;
+  }
+  
+  .anelp4 {
+    position: absolute;
+    top: 55%;
+    left: 51%;
+    transform: translate(-50%, -50%);
+    width: 420px;
+    height: 420px;
+    border: 30px solid rgb(163,0,255);
+    border-radius: 50%;
+    background-color: transparent;
+    z-index: 1500;
+  }
+  
+  .estrelas { /* Classe para o container das estrelas */
+    margin-bottom: 5px;
+  }
+  
+  .c1 {
+    position: absolute; 
+    border-radius: 5%;
+    top: 23%;
+    left: 15%;
+    padding: 15px;
+  }
+  
+  .c2 {
+    position: absolute; 
+    border-radius: 5%;
+    top: 55%;
+    left: 8%;
+    padding: 15px;
+  }
+  
+  .c3 {
+    position: absolute; 
+    border-radius: 5%;
+    top: 23%;
+    right: 12%;
+    padding: 15px;
+  }
+  
+  .c4 {
+    position: absolute; 
+    border-radius: 5%;
+    top: 55%;
+    right: 8%;
+    padding: 15px;
+  }
+  
+  .c1, .c2, .c3, .c4 {
+    background-color: rgba(217, 217, 217, 0.304);
+    color: white; 
+    width: 350px;
+    height: 130px;
+    text-align: justify;
+  }

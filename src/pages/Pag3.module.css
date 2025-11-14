@@ -1,0 +1,68 @@
+/* src/pages/Pag3.module.css */
+.horizontal {
+    min-height: 100vh; 
+    background-image: linear-gradient(
+      to bottom,
+      rgb(43,47,56) 0%,
+      rgb(43,47,56) 30%,
+      rgb(32,35,42) 30%,
+      rgb(32,35,42) 100%
+    );
+    position: relative;
+  }
+  
+  .copop3 {
+    position: fixed;
+    top: 60%;
+    left: 30%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    z-index: 2000;
+  }
+  
+  .copop3 img {
+    width: 600px;
+    height: auto;
+  }
+  
+  .anelp3 {
+    position: absolute;
+    top: 60%;
+    left: 42%;
+    transform: translate(-50%, -50%);
+    width: 430px;
+    height: 430px;
+    border: 30px solid rgb(163,0,255);
+    border-radius: 50%;
+    background-color: transparent;
+    z-index: 1500;
+  }
+  
+  .listap3 ul {
+    list-style: none; 
+    padding: 0;       
+    margin: 0;        
+  }
+  
+  .listap3 li {
+    display: flex;        
+    align-items: center;  
+    gap: 10px;            
+  }
+  
+  .listap3 {
+    padding: 10px;
+    position: absolute;
+    left: 58%; 
+    top: 45%;
+    color: rgb(227,193,165);
+    line-height: 2;
+  }
+  
+  .titulop3 {
+    max-width: 600px;
+    width: 100%;
+    padding: 10px;
+    position: absolute;
+    top: 17%; 
+    left: 58%;
+  }
